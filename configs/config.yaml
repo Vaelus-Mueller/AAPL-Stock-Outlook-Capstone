@@ -1,0 +1,70 @@
+project:
+  name: aapl-stock-outlook-assistant
+  supported_ticker: AAPL
+  forecast_horizon_days: 5
+
+data:
+  raw_path: data/aapl_daily.csv
+  processed_path: data/aapl_features.csv
+  start_date: "2015-01-01"
+  end_date: null
+  data_source: yfinance
+
+features:
+  price_column: Adj Close
+  lag_days: [1, 2, 3, 5, 10]
+  moving_average_windows: [5, 10, 20]
+  volatility_windows: [5, 10, 20]
+  rsi_window: 14
+
+training:
+  test_size: 0.2
+  random_state: 42
+  primary_metric: roc_auc
+  model_output_path: models/best_model.joblib
+  minimum_metrics:
+    accuracy: 0.50
+    roc_auc: 0.50
+  model_configs:
+    - name: logistic_regression_default
+      algorithm: logistic_regression
+      params:
+        C: 1.0
+        max_iter: 1000
+        class_weight: balanced
+    - name: logistic_regression_stronger_regularization
+      algorithm: logistic_regression
+      params:
+        C: 0.3
+        max_iter: 1000
+        class_weight: balanced
+    - name: random_forest_balanced
+      algorithm: random_forest
+      params:
+        n_estimators: 300
+        max_depth: 5
+        min_samples_leaf: 10
+        class_weight: balanced
+    - name: random_forest_deeper
+      algorithm: random_forest
+      params:
+        n_estimators: 400
+        max_depth: 8
+        min_samples_leaf: 5
+        class_weight: balanced
+    - name: gradient_boosting
+      algorithm: gradient_boosting
+      params:
+        n_estimators: 200
+        learning_rate: 0.05
+        max_depth: 3
+
+mlflow:
+  tracking_uri: mlruns
+  experiment_name: aapl_stock_direction
+
+llm:
+  provider: nebius
+  api_base_url: https://api.studio.nebius.ai/v1/chat/completions
+  model: meta-llama/Meta-Llama-3.1-70B-Instruct
+  api_key_env: NEBIUS_API_KEY

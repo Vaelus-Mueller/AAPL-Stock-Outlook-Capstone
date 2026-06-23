@@ -1,0 +1,27 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+
+# Virtual environments and secrets
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Data, models, and experiment artifacts
+/data/*
+!/data/.gitkeep
+/models/*
+!/models/.gitkeep
+/reports/*
+!/reports/.gitkeep
+/mlruns/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
