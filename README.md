@@ -185,7 +185,7 @@ The project reports classification metrics appropriate for the task:
 - ROC-AUC
 - Majority-class baseline metrics
 
-The expected performance goal is to compare honestly against a naive baseline and beat it where feasible. Stock prediction is noisy, so the project does not claim 90% accuracy.
+The expected performance goal is to compare honestly against a naive baseline and beat it where feasible. Stock prediction is noisy, so the project does not claim high accuracy.
 
 Current best MLflow run after training on downloaded AAPL data:
 
