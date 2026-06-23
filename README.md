@@ -130,6 +130,10 @@ What is the outlook for ARCC next week?
 What will AAPL do next month?
 ```
 
+## Demo Video
+
+Watch the demo walkthrough: [AAPL Stock Outlook Assistant Demo](https://www.loom.com/share/c24988a58ea44e5f9ac942a1582078c1)
+
 ## Docker
 
 Build and run the app:
