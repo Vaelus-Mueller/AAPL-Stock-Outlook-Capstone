@@ -8,10 +8,11 @@ def test_parser_extracts_aapl_and_week_horizon():
     assert parsed.is_valid
 
 
-def test_parser_handles_missing_ticker_gracefully():
+def test_parser_defaults_missing_ticker_to_aapl():
     parsed = fallback_parse_query("Will it go up next week?")
-    assert not parsed.is_valid
-    assert "ticker" in parsed.missing_fields
+    assert parsed.ticker == "AAPL"
+    assert parsed.horizon_days == 5
+    assert parsed.is_valid
 
 
 def test_parser_rejects_unsupported_ticker():
@@ -19,6 +20,13 @@ def test_parser_rejects_unsupported_ticker():
     assert not parsed.is_valid
     assert parsed.errors
     assert "Unsupported ticker" in parsed.errors[0]
+
+
+def test_parser_rejects_unsupported_company_name():
+    parsed = fallback_parse_query("Should I buy Tesla stock?")
+    assert not parsed.is_valid
+    assert parsed.errors
+    assert "TSLA" in parsed.errors[0]
 
 
 def test_probability_curve_has_expected_shape():

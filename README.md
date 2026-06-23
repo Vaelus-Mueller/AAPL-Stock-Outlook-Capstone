@@ -120,12 +120,12 @@ Try:
 
 ```text
 What is the outlook for Apple next week?
+Will it go up next week?
 ```
 
 Edge-case demo examples:
 
 ```text
-Will it go up next week?
 What is the outlook for ARCC next week?
 What will AAPL do next month?
 ```

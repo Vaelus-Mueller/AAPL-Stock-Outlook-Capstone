@@ -27,6 +27,18 @@ SUPPORTED_COMPANY_ALIASES = {
 }
 
 COMMON_UNSUPPORTED_TICKERS = {"TSLA", "NVDA", "MSFT", "GOOGL", "GOOG", "AMZN", "META", "ARCC"}
+UNSUPPORTED_COMPANY_ALIASES = {
+    "TESLA": "TSLA",
+    "NVIDIA": "NVDA",
+    "MICROSOFT": "MSFT",
+    "GOOGLE": "GOOGL",
+    "ALPHABET": "GOOGL",
+    "AMAZON": "AMZN",
+    "META": "META",
+    "FACEBOOK": "META",
+    "ARES CAPITAL": "ARCC",
+    "ARES CAPITOL": "ARCC",
+}
 
 
 @dataclass
@@ -53,8 +65,12 @@ def fallback_parse_query(query: str, supported_ticker: str = "AAPL", default_hor
             break
 
     found_unsupported = sorted(symbol for symbol in COMMON_UNSUPPORTED_TICKERS if re.search(rf"\b{symbol}\b", normalized))
+    for alias, symbol in UNSUPPORTED_COMPANY_ALIASES.items():
+        if re.search(rf"\b{re.escape(alias)}\b", normalized):
+            found_unsupported.append(symbol)
     if found_unsupported and ticker is None:
-        errors.append(f"Unsupported ticker: {found_unsupported[0]}. This model is trained for {supported_ticker} only.")
+        unsupported = sorted(set(found_unsupported))[0]
+        errors.append(f"Unsupported ticker: {unsupported}. This model is trained for {supported_ticker} only.")
 
     horizon_days = default_horizon
     explicit_day_match = re.search(r"NEXT\s+(\d+)\s+(TRADING\s+)?DAYS?", normalized)
@@ -73,7 +89,7 @@ def fallback_parse_query(query: str, supported_ticker: str = "AAPL", default_hor
 
     missing_fields = []
     if ticker is None and not errors:
-        missing_fields.append("ticker")
+        ticker = supported_ticker
 
     return ParsedQuery(
         ticker=ticker,
